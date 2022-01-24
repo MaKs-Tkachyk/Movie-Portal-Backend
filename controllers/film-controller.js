@@ -6,7 +6,7 @@ const FilmService = require("../service/film-service");
 class FilmController {
     async create(req, res, next) {
         try {
-            await FilmService.create(req.body, req.files.picture)
+            await FilmService.create(req.body)
             res.json({ message: "Фильм был успешно добавлен" })
         } catch (e) {
             next(e)
@@ -39,9 +39,9 @@ class FilmController {
     }
     async update(req, res, next) {
         try {
-            let picture
-            if(!req.files) picture = false
-            else picture = req.files.picture
+            let picture=true
+            if(!req.body.picture) picture = false
+            // else picture = req.files.picture
             const updatedFilm = await FilmService.update(req.body, picture);
             return res.json(updatedFilm);
         } catch (e) {

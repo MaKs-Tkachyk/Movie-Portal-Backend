@@ -13,10 +13,10 @@ class FileController {
             const parentFile = await File.findOne({ _id: parent })
             if (!parentFile) {
                 file.path = name
-                await fileService.createDir(req,file)
+                await fileService.createDir(req, file)
             } else {
                 file.path = `${parentFile.path}\\${file.name}`
-                await fileService.createDir(req,file)
+                await fileService.createDir(req, file)
                 parentFile.childs.push(file._id)
                 await parentFile.save()
             }
@@ -69,7 +69,7 @@ class FileController {
                 type,
                 size: file.size,
                 path: filePath,
-                parent: parent ? parent._id: null,
+                parent: parent ? parent._id : null,
                 user: user._id
             })
 
@@ -87,7 +87,7 @@ class FileController {
     async downloadFile(req, res) {
         try {
             const file = await File.findOne({ _id: req.query.id, user: req.user.id })
-            const path = fileService.getPath(req,file)
+            const path = fileService.getPath(req, file)
             if (fs.existsSync(path)) {
                 return res.download(path, file.name)
             }
@@ -115,17 +115,11 @@ class FileController {
 
     async changeAvatar(req, res) {
         try {
-            const file = req.files.file
+            console.log()
+            const file = req.body.file
+            console.log(file)
             const user = await User.findById(req.user.id)
-
-            if (fs.existsSync(path.resolve('static') + "\\" + user.avatar)) {
-                fs.unlinkSync(path.resolve('static') + "\\" + user.avatar)
-                user.avatar = null
-            }
-
-
-            const avatarName = fileService.saveFile(file)
-            user.avatar = avatarName
+            user.avatar = file
             await user.save()
             return res.json(user)
         } catch (e) {
