@@ -23,8 +23,16 @@ class FilmController {
     }
     async getOne(req, res, next) {
         try {
-            const post = await FilmService.getOne(req.params.name)
-            return res.json(post)
+            const film = await FilmService.getOne(req.params.name)
+            return res.json(film)
+        } catch (e) {
+            next(e)
+        }
+    }
+    async findFilmId(req, res, next) {
+        try {
+            const film = await FilmService.findFilmId(req.params.id)
+            return res.json(film)
         } catch (e) {
             next(e)
         }
@@ -50,8 +58,8 @@ class FilmController {
     }
     async getFilmGenre(req, res) {
         try {
-         console.log(req.body.genre)
-         let movie = await FilmService.getFilmGenre(req.body.genre);
+    
+         let movie = await FilmService.getFilmGenre(req.body.genre,req.body.limit);
             return res.json(movie)
         } catch (e) {
             res.status(500).json(e.message)

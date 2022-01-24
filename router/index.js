@@ -36,6 +36,7 @@ router.post('/film', authMiddlewares, filmController.create)
 router.post('/film/genre', filmController.getFilmGenre)
 router.get('/films', authMiddlewares, filmController.getAll)
 router.get('/film/:name?', authMiddlewares, filmController.getOne)
+router.get('/profileFilm/:id?', authMiddlewares, filmController.findFilmId)
 router.put('/film', authMiddlewares, filmController.update)
 router.delete('/film/:name', authMiddlewares, filmController.delete)
 

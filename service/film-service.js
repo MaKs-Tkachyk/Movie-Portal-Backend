@@ -24,7 +24,6 @@ class FilmService {
         return Film;
     }
     async getOne(name) {
-
         if (!name) {
             throw ApiError.BadRequest('Название фильма не указано')
         }
@@ -34,7 +33,16 @@ class FilmService {
         }
         return movie;
     }
-
+    async findFilmId(_id) {
+        if (!_id) {
+            throw ApiError.BadRequest('Название фильма не указано')
+        }
+        const movie = await film.findById(_id);
+        if (!_id) {
+            throw ApiError.BadRequest('Фильм не найден')
+        }
+        return movie;
+    }
     async update(movie, picture) {
         let filmName = ""
         const previousUpdateFilm = await film.findOne({ name: movie.name })
@@ -66,7 +74,7 @@ class FilmService {
         movie = await film.findOneAndDelete({ name: name });
         return movie;
     }
-    async getFilmGenre(genre) {
+    async getFilmGenre(genre,limit) {
 
         let movie = await film.aggregate([
             { $match: { "genre": { $in: [...genre] } } },
@@ -80,7 +88,7 @@ class FilmService {
                     "release": { "$first": "$release" },
                 }
             },
-            { $limit: 100 }
+            { $limit: limit }
 
         ])
         return movie
