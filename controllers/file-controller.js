@@ -115,12 +115,10 @@ class FileController {
 
     async changeAvatar(req, res) {
         try {
-            console.log()
             const file = req.body.file
-            console.log(file)
-            const user = await User.findById(req.user.id)
-            user.avatar = file
-            await user.save()
+            const user = await User.findByIdAndUpdate(req.user.id,file)
+            // user.avatar = file
+            // await user.save()
             return res.json(user)
         } catch (e) {
             console.log(e)
@@ -128,18 +126,6 @@ class FileController {
         }
     }
 
-    async deleteAvatar(req, res) {
-        try {
-            const user = await User.findById(req.user.id)
-            fs.unlinkSync(req.staticPath + "\\" + user.avatar)
-            user.avatar = null
-            await user.save()
-            return res.json(user)
-        } catch (e) {
-            console.log(e)
-            return res.status(400).json({ message: 'Delete avatar error' })
-        }
-    }
 }
 
 

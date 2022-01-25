@@ -22,13 +22,8 @@ router.get('/users', authMiddlewares, userController.getUsers)
 
 
 //files
-router.post('/files', authMiddlewares, fileController.createDir)
-router.get('/files', authMiddlewares, fileController.getFiles)
-router.post('/files/upload', authMiddlewares, fileController.uploadFile)
-router.post('/files/uploadAvatar', authMiddlewares, fileController.uploadAvatar)
 router.post('/files/changeAvatar', authMiddlewares, fileController.changeAvatar)
-router.get('/files/download', authMiddlewares, fileController.downloadFile)
-router.delete('/files/avatar', authMiddlewares, fileController.deleteAvatar)
+
 
 //posts
 
