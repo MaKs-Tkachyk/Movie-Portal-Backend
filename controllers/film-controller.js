@@ -6,10 +6,10 @@ const FilmService = require("../service/film-service");
 class FilmController {
     async create(req, res, next) {
         try {
-            await FilmService.create(req.body)
+            await FilmService.create(req.file,req.body)
             res.json({ message: "Фильм был успешно добавлен" })
         } catch (e) {
-            next(e)
+            res.status(400).json({message:e.message})
         }
     }
 
@@ -26,7 +26,8 @@ class FilmController {
             const film = await FilmService.getOne(req.params.name)
             return res.json(film)
         } catch (e) {
-            next(e)
+            res.status(400).json({message:e.message})
+
         }
     }
     async findFilmId(req, res, next) {
@@ -34,18 +35,15 @@ class FilmController {
             const film = await FilmService.findFilmId(req.params.id)
             return res.json(film)
         } catch (e) {
-            next(e)
+            res.status(400).json({message:e.message})
         }
     }
     async update(req, res, next) {
         try {
-            let picture=true
-            if(!req.body.picture) picture = false
-            // else picture = req.files.picture
-            const updatedFilm = await FilmService.update(req.body, picture);
+            const updatedFilm = await FilmService.update(req.body, req.file);
             return res.json(updatedFilm);
         } catch (e) {
-            next(e)
+            res.status(400).json({message:e.message})
         }
     }
     async delete(req, res) {
@@ -53,7 +51,7 @@ class FilmController {
             await FilmService.delete(req.params.name);
             return res.json({ message: "фильм был удален" })
         } catch (e) {
-            res.status(500).json(e.message)
+            res.status(400).json({message:e.message})
         }
     }
     async getFilmGenre(req, res) {

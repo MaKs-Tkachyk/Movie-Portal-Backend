@@ -31,7 +31,7 @@ class UserService {
         await MailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`)
 
         const userDto = new UserDto(user);//id, emai, isActivate
-        const tokens = tokenService.generateTokens({ ...userDto })
+        const tokens = tokenService.generateTokens({id: userDto.id,email:userDto.email })
         await tokenService.saveToken(userDto.id, tokens.refreshToken)
 
 
@@ -63,7 +63,7 @@ class UserService {
         }
         const userDto = new UserDto(user)
 
-        const tokens = tokenService.generateTokens({ ...userDto })
+        const tokens = tokenService.generateTokens({id: userDto.id,email:userDto.email })
 
         await tokenService.saveToken(userDto.id, tokens.refreshToken)
         return {
@@ -78,7 +78,7 @@ class UserService {
     }
 
     async refresh(refreshToken) {
-        if (!refreshToken) {
+        if (!refreshToken) {  
             throw ApiError.UnauthorizedError();
         }
         const userData = tokenService.validateRefreshToken(refreshToken);
@@ -88,7 +88,7 @@ class UserService {
         }
         const user = await UserModel.findById(userData.id);
         const userDto = new UserDto(user);
-        const tokens = tokenService.generateTokens({ ...userDto });
+        const tokens = tokenService.generateTokens({ id: userDto.id,email:userDto.email});
 
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
         return { ...tokens, user: userDto }

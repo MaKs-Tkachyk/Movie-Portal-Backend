@@ -1,52 +1,59 @@
 const fs = require('fs')
-const File = require('../models/file-model')
 const path = require('path')
 const uuid = require('uuid')
+require('dotenv').config()
+const S3 = require('aws-sdk/clients/s3')
+const ApiError = require('../exeptions/api-error')
 
+const bucketName = process.env.AWS_BUCKET_NAME
+const region = process.env.AWS_BUCKET_REGION
+const accessKeyId = process.env.AWS_ACCESS_KEY
+const secretAccessKey = process.env.AWS_SECRET_KEY
+
+const s3 = new S3({
+    region,
+    accessKeyId,
+    secretAccessKey
+})
 
 class FileService {
+    async uploadFile(file) {
+        const fileStream = fs.createReadStream(file.path)
 
-    createDir(req, file) {
-        const filePath = this.getPath(req, file)
-        return new Promise(((resolve, reject) => {
-            try {
-                if (!fs.existsSync(filePath)) {
-                    fs.mkdirSync(filePath)
-                    return resolve({ message: 'File was created' })
-                } else {
-                    return reject({ message: "File already exist" })
-                }
-            } catch (e) {
-                return reject({ message: 'File error' })
-            }
-        }))
+        const uploadParams = {
+            Bucket: bucketName,
+            Body: fileStream,
+            Key: file.filename
+        }
+
+        return s3.upload(uploadParams).promise()
     }
 
-    getPath(req, file) {
-        return `${req.filePath}\\${file.user}\\${file.path}`
-    }
-
-    saveFile(file) {
+    async checkFile(fileKey) {
         try {
-            if (!fs.existsSync(path.resolve('static'))) {
-                fs.mkdirSync((path.dirname(__dirname), 'static'), (err) => {
-                    if (err) {
-                        console.log(err)
-                    }
-                    console.log("Папка создана")
-                })
-            }
-            const fileName = uuid.v4() + '.jpg';
-            const filePath = path.resolve('static', fileName);
-            file.mv(filePath);
-            return fileName;
+            const params = { Bucket: bucketName, Key: fileKey };
+            const picture = await s3.getObject(params).promise();
+            return picture && "200"
         } catch (e) {
-            console.log(e)
+            return e.statusCode
         }
     }
+
+    async deleteFile(fileKey) {
+
+        if(!fileKey){
+            throw ApiError.BadRequest('Фильм не найден')
+        }
+            const params = { Bucket: bucketName, Key: fileKey };
+            const picture = await s3.deleteObject(params).promise();
+            return picture 
+
+    }
+
+
 }
 
-
+// 
 module.exports = new FileService()
 
 

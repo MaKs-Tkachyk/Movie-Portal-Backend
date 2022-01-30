@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose')
 
 
@@ -11,34 +10,29 @@ const mongoose = require('mongoose')
 const router = require('./router/index')
 const errorMeddlewear = require("./middlewares/erros-middlewares")
 const fileUpload = require("express-fileupload")
-const filePathMiddleware = require("./middlewares/filePath-middlewares")
-const staticPathMiddleware = require("./middlewares/staticPath-middlewares")
+
 
 
 
 const PORT = process.env.PORT || 5000
 
-const path = require('path')
+
 
 const app = express()
 
 
 
 
-
-app.use(fileUpload({}))
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
     credentials: true,
-    origin: process.env.CLIENT_URL
+    origin: process.env.CLIENT_URL,
 }))
-app.use('/api', router)
-app.use(errorMeddlewear)
-app.use(filePathMiddleware(path.resolve(__dirname, "files")))
-app.use(staticPathMiddleware(path.resolve(__dirname, "static")))
-app.use(express.static(path.resolve(__dirname, "static")))
 
+app.use(errorMeddlewear)
+app.use('/api', router)
+app.use(fileUpload({}))
 
 
 

@@ -9,12 +9,12 @@ module.exports = function (req, res, next) {
         }
 
         const accessToken = autorizationHeadr.split(" ")[1]
-        if(!accessToken){
+        if (!accessToken) {
             return next(ApiError.UnauthorisedError())
         }
 
         const userData = tokenService.validateAccessToken(accessToken)
-        if(!userData){
+        if (!userData) {
             return next(ApiError.UnauthorisedError())
         }
 
