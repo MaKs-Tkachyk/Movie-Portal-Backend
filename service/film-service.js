@@ -8,13 +8,13 @@ const unlinkFile = util.promisify(fs.unlink)
 
 class FilmService {
     async create(filmPicture, movie) {
-        unlinkFile(filmPicture.path)
+        
         const name = await film.find({ name: movie.name })
         if (name.length) {
             throw ApiError.BadRequest('Такой фильм уже существует')
         }
         const result = await fileService.uploadFile(filmPicture)
-        
+        unlinkFile(filmPicture.path)
         const genre = movie.genre.split(",")
 
         const createdPost = await film.create({ ...movie, genre, picture: result.Location });
