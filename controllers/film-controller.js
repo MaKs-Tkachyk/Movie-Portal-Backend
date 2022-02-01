@@ -6,10 +6,10 @@ const FilmService = require("../service/film-service");
 class FilmController {
     async create(req, res, next) {
         try {
-            await FilmService.create(req.file,req.body)
+            await FilmService.create(req.file, req.body)
             res.json({ message: "Фильм был успешно добавлен" })
         } catch (e) {
-            res.status(400).json({message:e.message})
+            res.status(400).json({ message: e.message })
         }
     }
 
@@ -26,7 +26,7 @@ class FilmController {
             const film = await FilmService.getOne(req.params.name)
             return res.json(film)
         } catch (e) {
-            res.status(400).json({message:e.message})
+            res.status(400).json({ message: e.message })
 
         }
     }
@@ -35,7 +35,7 @@ class FilmController {
             const film = await FilmService.findFilmId(req.params.id)
             return res.json(film)
         } catch (e) {
-            res.status(400).json({message:e.message})
+            res.status(400).json({ message: e.message })
         }
     }
     async update(req, res, next) {
@@ -43,7 +43,7 @@ class FilmController {
             const updatedFilm = await FilmService.update(req.body, req.file);
             return res.json(updatedFilm);
         } catch (e) {
-            res.status(400).json({message:e.message})
+            res.status(400).json({ message: e.message })
         }
     }
     async delete(req, res) {
@@ -51,16 +51,26 @@ class FilmController {
             await FilmService.delete(req.params.name);
             return res.json({ message: "фильм был удален" })
         } catch (e) {
-            res.status(400).json({message:e.message})
+            res.status(400).json({ message: e.message })
         }
     }
     async getFilmGenre(req, res) {
         try {
-    
-         let movie = await FilmService.getFilmGenre(req.body.genre,req.body.limit);
+
+            let movie = await FilmService.getFilmGenre(req.body.genre, req.body.limit);
             return res.json(movie)
         } catch (e) {
             res.status(500).json(e.message)
+        }
+    }
+    async searchFilm(req, res) {
+        try { 
+            let film = await FilmService.searchFilm(req.body.name)
+           
+            return res.json(film)
+        } catch (e) {
+            console.log(e)
+            return res.status(400).json({ message: 'Search error' })
         }
     }
 }

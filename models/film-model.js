@@ -9,7 +9,7 @@ const film = new mongoose.Schema({
     time: { type: Number, required: true },
     rating: { type: Number, required: true, default: 0 },
     genre: { type: Array, required: true },
-    release: { type: String, required: true },
+    release: { type: Number, required: true },
     director: { type: String, required: true },
     cast: { type: String, required: true },
 

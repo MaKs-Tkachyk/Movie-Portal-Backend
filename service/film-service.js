@@ -8,7 +8,6 @@ const unlinkFile = util.promisify(fs.unlink)
 
 class FilmService {
     async create(filmPicture, movie) {
-        
         const name = await film.find({ name: movie.name })
         if (name.length) {
             throw ApiError.BadRequest('Такой фильм уже существует')
@@ -16,8 +15,8 @@ class FilmService {
         const result = await fileService.uploadFile(filmPicture)
         unlinkFile(filmPicture.path)
         const genre = movie.genre.split(",")
-
-        const createdPost = await film.create({ ...movie, genre, picture: result.Location });
+        const release = parseInt(movie.release,10)   
+        const createdPost = await film.create({ ...movie, genre, picture: result.Location,release });
 
         return createdPost;
     }
@@ -61,8 +60,8 @@ class FilmService {
             filmName = previousUpdateFilm.picture
         }
         const genre = movie.genre.split(",")
-
-        const updatedFilm = await film.findOneAndUpdate({ name: movie.name }, { ...movie, picture: filmName,  genre }, { new: true, upsert: true })
+        const release = parseInt(movie.release,10)   
+        const updatedFilm = await film.findOneAndUpdate({ name: movie.name }, { ...movie, picture: filmName,  genre,release }, { new: true, upsert: true })
         return updatedFilm;
     }
 
@@ -97,6 +96,24 @@ class FilmService {
 
         ])
         return movie
+    }
+
+
+    async searchFilm(name) {
+     return  await  film.aggregate([
+        { $match: { "name": {$regex: name,$options:'i'} }},
+        {
+            $group: {
+                _id: "$_id",
+                "name": { "$first": "$name" },
+                "picture": { "$first": "$picture" },
+                "time": { "$first": "$time" },
+                "genre": { "$first": "$genre" },
+                "release": { "$first": "$release" },
+            }
+        },
+       {$sort: { score: { $meta: "textScore" }, release:-1}}
+        ])
     }
 }
 
