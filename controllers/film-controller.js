@@ -64,13 +64,24 @@ class FilmController {
         }
     }
     async searchFilm(req, res) {
-        try { 
+        try {
             let film = await FilmService.searchFilm(req.body.name)
-           
+
             return res.json(film)
         } catch (e) {
             console.log(e)
             return res.status(400).json({ message: 'Search error' })
+        }
+    }
+    async getRating(req, res, next) {
+        try {
+            console.log(req.body)
+            console.log(req.user)
+            let rating = await FilmService.getRating(req.user, req.body)
+            return res.json(rating)
+        } catch (e) {
+            console.log(e)
+            return res.status(400).json({ message: e.message })
         }
     }
 }

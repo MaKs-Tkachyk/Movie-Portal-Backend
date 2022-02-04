@@ -8,7 +8,8 @@ const UserSchema = new Schema({
     isActivated: { type: Boolean, default: false },
     activationLink: { type: String },
     avatar: { type: String },
-    admin:{type:Boolean,default: false}
+    admin:{type:Boolean,default: false},
+    voice:{type:Array}
 })
 
 

@@ -35,6 +35,7 @@ router.post('/films/search', filmController.searchFilm)
 router.get('/film/:name?', authMiddlewares, filmController.getOne)
 router.get('/profileFilm/:id?', authMiddlewares, filmController.findFilmId)
 router.put('/film',[upload.single('picture'), authMiddlewares], filmController.update)
+router.put('/film/rating',authMiddlewares, filmController.getRating)
 router.delete('/film/:name', authMiddlewares, filmController.delete)
 
 
