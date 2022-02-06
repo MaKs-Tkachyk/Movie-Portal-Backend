@@ -80,7 +80,7 @@ class FilmService {
         movie = await film.findOneAndDelete({ name: name });
         return movie;
     }
-    async getFilmGenre(genre, limit) {
+    async getFilmGenre(genre, limit,skipFilm) {
 
         let movie = await film.aggregate([
             { $match: { "genre": { $in: [...genre] } } },
@@ -94,11 +94,14 @@ class FilmService {
                     "release": { "$first": "$release" },
                 }
             },
+            { $sort: { release: -1 , time: 1 } },
+            { $skip: skipFilm },
             { $limit: limit },
-            { $sort: { release: -1 } }
-
+          
+           
+            // {$count:"passing_score"}
         ])
-        return movie
+        return  movie
     }
 
 

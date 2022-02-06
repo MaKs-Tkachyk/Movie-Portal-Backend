@@ -43,15 +43,7 @@ class FileController {
   }
 
 
-  async getFile(req, res) {
-    try {
-      let result = await FileService.deleteFile(req.params.key)
-     return res.json({img:result})
-    } catch (e) {
-      console.log(e)
-      return res.status(400).json({ message: 'Upload avatar error' })
-    }
-  }
+
 }
 
 module.exports = new FileController()

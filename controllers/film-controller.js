@@ -56,8 +56,8 @@ class FilmController {
     }
     async getFilmGenre(req, res) {
         try {
-
-            let movie = await FilmService.getFilmGenre(req.body.genre, req.body.limit);
+            console.log(req.body.genre, req.body.limit,req.body.skipFilm)
+            let movie = await FilmService.getFilmGenre(req.body.genre, req.body.limit,req.body.skipFilm);
             return res.json(movie)
         } catch (e) {
             res.status(500).json(e.message)

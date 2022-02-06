@@ -24,7 +24,7 @@ router.get('/users', authMiddlewares, userController.getUsers)
 //files
 
 router.post('/changeAvatar', [upload.single('img'), authMiddlewares], fileController.changeAvatar)
-router.get('/images/:key', fileController.getFile)
+
 
 //posts
 
@@ -33,10 +33,10 @@ router.post('/film/genre', filmController.getFilmGenre)
 router.get('/films', authMiddlewares, filmController.getAll)
 router.post('/films/search', filmController.searchFilm)
 router.get('/film/:name?', authMiddlewares, filmController.getOne)
-router.get('/profileFilm/:id?', authMiddlewares, filmController.findFilmId)
+router.get('/profileFilm/:id?', filmController.findFilmId)
 router.put('/film',[upload.single('picture'), authMiddlewares], filmController.update)
 router.put('/film/rating',authMiddlewares, filmController.getRating)
-router.delete('/film/:name', authMiddlewares, filmController.delete)
+router.delete('/film/:name', filmController.delete)
 
 
 module.exports = router
