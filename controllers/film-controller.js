@@ -23,7 +23,7 @@ class FilmController {
     }
     async getOne(req, res, next) {
         try {
-            const film = await FilmService.getOne(req.params.name)
+            const film = await FilmService.getOne(req.body.name)
             return res.json(film)
         } catch (e) {
             res.status(400).json({ message: e.message })

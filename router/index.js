@@ -32,7 +32,7 @@ router.post('/film', [upload.single('picture'),authMiddlewares], filmController.
 router.post('/film/genre', filmController.getFilmGenre)
 router.get('/films', authMiddlewares, filmController.getAll)
 router.post('/films/search', filmController.searchFilm)
-router.get('/film/:name?', authMiddlewares, filmController.getOne)
+router.put('/film', authMiddlewares, filmController.getOne)
 router.get('/profileFilm/:id?', filmController.findFilmId)
 router.put('/film',[upload.single('picture'), authMiddlewares], filmController.update)
 router.put('/film/rating',authMiddlewares, filmController.getRating)

@@ -1,10 +1,8 @@
 const film = require("../models/film-model");
 const fileService = require("./file-service");
-const path = require('path')
 const fs = require('fs');
 const ApiError = require("../exeptions/api-error");
 const util = require('util');
-const { findOneAndUpdate, findById } = require("../models/film-model");
 const userModels = require("../models/user-models");
 const unlinkFile = util.promisify(fs.unlink)
 
@@ -94,12 +92,9 @@ class FilmService {
                     "release": { "$first": "$release" },
                 }
             },
-            { $sort: { release: -1 , time: 1 } },
+            { $sort: { release: -1,time:1 } },
             { $skip: skipFilm },
             { $limit: limit },
-          
-           
-            // {$count:"passing_score"}
         ])
         return  movie
     }
