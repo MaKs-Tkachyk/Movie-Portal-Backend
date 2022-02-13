@@ -9,6 +9,7 @@ class UserController {
 
     async registration(req, res, next) {
         try {
+            console.log(req.body)
             const errors = validationResult(req)
 
             if (!errors.isEmpty()) {
@@ -17,13 +18,13 @@ class UserController {
 
             const { email, password, userName } = req.body
             const userData = await userService.registration(email, password, userName)
-       
+
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
-         
+
             return res.json(userData)
         }
         catch (e) {
-            res.status(400).json({message:e.message})
+            res.status(400).json({ message: e.message })
         }
     }
     async login(req, res, next) {
@@ -34,7 +35,7 @@ class UserController {
             return res.json(userData)
         }
         catch (e) {
-            res.status(400).json({message:e.message})
+            res.status(400).json({ message: e.message })
         }
     }
     async logout(req, res, next) {
@@ -45,7 +46,7 @@ class UserController {
             return res.json(token)
         }
         catch (e) {
-            res.status(400).json({message:e.message})
+            res.status(400).json({ message: e.message })
         }
     }
     async active(req, res, next) {
@@ -55,7 +56,7 @@ class UserController {
             return res.redirect(process.env.CLIENT_URL)
         }
         catch (e) {
-            res.status(400).json({message:e.message})
+            res.status(400).json({ message: e.message })
         }
     }
     async refresh(req, res, next) {
@@ -66,7 +67,7 @@ class UserController {
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
             return res.json(userData);
         } catch (e) {
-            res.status(400).json({message:e.message})
+            res.status(400).json({ message: e.message })
         }
     }
     async getUsers(req, res, next) {
@@ -76,7 +77,7 @@ class UserController {
             return res.json(users)
         }
         catch (e) {
-            res.status(400).json({message:e.message})
+            res.status(400).json({ message: e.message })
         }
     }
 
