@@ -66,7 +66,6 @@ class FilmController {
     async searchFilm(req, res) {
         try {
             let film = await FilmService.searchFilm(req.body.name)
-
             return res.json(film)
         } catch (e) {
             console.log(e)

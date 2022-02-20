@@ -102,7 +102,7 @@ class FilmService {
 
     async searchFilm(name) {
         return await film.aggregate([
-            { $match: { "name": { $regex: name, $options: 'i' } } },
+            { $match:  { "name": { $regex: name, $options: 'i' } } },
             {
                 $group: {
                     _id: "$_id",
@@ -113,7 +113,8 @@ class FilmService {
                     "release": { "$first": "$release" },
                 }
             },
-            { $sort: { score: { $meta: "textScore" }, release: -1 } }
+            { $sort:{release: -1} },
+            { $limit: 20 },
         ])
     }
 
