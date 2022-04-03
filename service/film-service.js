@@ -74,7 +74,7 @@ class FilmService {
             throw ApiError.BadRequest('Фильм не найден')
         }
         let key = movie.picture.split("/").pop()
-        fileService.deleteFile(key)
+         fileService.deleteFile(key)
         movie = await film.findOneAndDelete({ name: name });
         return movie;
     }

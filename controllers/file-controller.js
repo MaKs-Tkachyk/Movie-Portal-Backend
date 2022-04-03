@@ -27,12 +27,15 @@ class FileController {
 
   async changeAvatar(req, res) {
     try {
-
       const file = req.file
       const user = await User.findById(req.user.id)
+      console.log(file)
       if (user.avatar) {
+        console.log(1)
         let key = user.avatar.split("/").pop()
-        await FileService.deleteFile(key)
+        console.log(key)
+        FileService.deleteFile(key)
+        console.log(1)
       }
       const result = await FileService.uploadFile(file)
       unlinkFile(file.path)

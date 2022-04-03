@@ -41,13 +41,18 @@ class FileService {
 
     async deleteFile(fileKey) {
 
-        if(!fileKey){
+        if (!fileKey) {
             throw ApiError.BadRequest('Фильм не найден')
         }
-            const params = { Bucket: bucketName, Key: fileKey };
-            const picture = await s3.deleteObject(params).promise();
-            return picture 
 
+        const params = { Bucket: bucketName, Key: fileKey };
+
+        await  s3.deleteObject(params, function(err, data) {
+            if (err) 
+              console.log(err, err.stack);  // error
+            else    
+             console.log(chalk.green("File Successfully Deleted!"));
+          });
     }
 
 
